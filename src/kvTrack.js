@@ -1,96 +1,76 @@
-(function ($, global) {
+/**
+ * kvTrack - v0.0.1
+ * Copyright (c) 2016 Kiva Microfunds
+ *
+ * Licensed under the MIT license.
+ * http://github.com/kiva/fbkiva/license.txt
+ */
+define(['jquery'], function ($) {
+	'use strict';
+
+	/**
+	 * @typedef {Object} Promise
+	 */
 
 	/**
 	 *
-	 * @param {Object} options
+	 * @param {string} uaID
+	 * @param {Function} logHandler
 	 * @constructor
 	 */
-	function KvTrack (options) {
+	function kvTrack (uaID) {
+		var self = this;
+		this._gaID = '';
+		this.ga = null;
 
+		// Initialize Google Analytics
+		self.setUAId(uaID);
+		self.initGA();
+
+		// Contextualize all kvTrack methods
+		$.each(this, function (methodName, fn) {
+			if (typeof fn == 'function') {
+				self[methodName] = $.proxy(self, methodName);
+			}
+		});
 	}
 
 
-	/**
-	 *
-	 * @param {String} cookieName
-	 */
-	KvTrack.removeMpCookie = function (cookieName) {
-
-	};
-
-
-	/**
-	 *
-	 * @param {Array} cookieNames
-	 */
-	KvTrack.removeMpCookies = function (cookieNames) {
-		$.each(cookieNames, function (index, name) {
-			KvTrack.removeMpCookie(name);
-		});
-	};
-
-
-	/**
-	 *
-	 * @param {String} projectName
-	 */
-	KvTrack.makeMixPanelAliased = function (projectName) {
-
-	};
-
-
-	KvTrack.prototype = {
-		initMp: function () {
-
+	kvTrack.prototype = {
+		init: function () {
 		}
 
 
-		, initGa: function () {
-
+		, setUAId: function (uaID) {
+			this._gaID = uaID;
 		}
 
 
-		, initMono: function () {
-
+		, initGA: function () {
+			var self = this;
+			// Get analytics.js from Google
+			$.ajax({
+				url: '//www.google-analytics.com/analytics.js'
+				, dataType: 'script'
+				, cache: true
+				, crossDomain: true // forces jQuery to create a script-tag as apposed to loading via ajax
+			}).fail(function(){
+			}).done(function(){
+				self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+				self.ga('create', self._gaID, 'auto');
+			});
 		}
 
 
-		, track: function (name, properties, options, callback) {
-
-		}
-
-
-		, setSessionProperty: function (name, property) {
-
-		}
-
-
-		, removeSessionProperty: function (name) {
-
-		}
-
-
-		, setUserProperty: function (name, property) {
-
-		}
-
-
-		, removeUserProperty: function (name) {
-
-		}
-
-
-		, trackLink: function () {
-
-		}
-
-
-		, trackForm: function () {
-
+		, trackEvent: function (category, action, label, value) {
+			this.ga('send', 'event', {
+				'eventCategory': category,
+				'eventAction': action,
+				'eventLabel': label,
+				'eventValue': value
+			});
 		}
 	};
 
-
-	global.KvTrack = KvTrack;
-
-}(jQuery, this));
+	return kvTrack;
+});
