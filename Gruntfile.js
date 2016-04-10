@@ -50,8 +50,8 @@ module.exports = function(grunt) {
 					banner: '<%= meta.banner %>'
 				}
 				, files: {
-					'<%= dist %>/iife/fbKiva.js': ['build/_iife.js']
-					, '<%= dist %>/amd/fbKiva.js': ['build/_amd.js']
+					'<%= dist %>/iife/kvTrack.js': ['build/_iife.js']
+					, '<%= dist %>/amd/kvTrack.js': ['build/_amd.js']
 				}
 			}
 		}
@@ -73,13 +73,12 @@ module.exports = function(grunt) {
 					banner: '<%= meta.banner %>'
 				}
 				, files: {
-					'<%= dist %>/iife/fbKiva.min.js': ['<%= dist %>/iife/fbKiva.js']
-					, '<%= dist %>/amd/fbKiva.min.js': ['<%= dist %>/amd/fbKiva.js']
+					'<%= dist %>/iife/kvTrack.min.js': ['<%= dist %>/iife/kvTrack.js']
+					, '<%= dist %>/amd/kvTrack.min.js': ['<%= dist %>/amd/kvTrack.js']
 				}
 			}
 		}
 	});
-
 
 	grunt.loadNpmTasks('grunt-bump');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
