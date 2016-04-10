@@ -54,8 +54,8 @@ kvTrack.prototype = {
 		}).fail(function(){
 			this.isReady.reject();
 		}).done(function(){
-			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-			self.ga('create', self._gaID, 'auto');
+			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
+			self.ga('create', self._gaID, 'auto'); // jshint ignore:line
 			self.isReady.resolve();
 		});
 	}

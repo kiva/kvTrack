@@ -15,7 +15,6 @@
 	, "strict": true
 	, "trailing": true
 	, "quotmark": "single"
-
 	, "laxbreak": true
 	, "laxcomma": true
 	, "smarttabs": true
@@ -23,12 +22,10 @@
 
     , "node": true
 	, "browser": true
-
 	, "predef": [
 		"define"
-		, "jQuery"
+		, "$"
 		, "Modernizr"
-
 		, "buster"
 		, "sinon"
 		, "afterEach"
@@ -36,7 +33,6 @@
 		, "describe"
 		, "expect"
 		, "it"
-
 		, "appendLoadFixtures"
 		, "appendLoadStyleFixtures"
 		, "appendSetFixtures"
