@@ -2,4 +2,20 @@
   "name": "kvTrack",
   "version": "0.0.3",
   "license": "MIT",
+  "homepage": "https://github.com/kiva/kvTrack",
+  "authors": [
+    "Abhishek Bhatnagar <abhishekbh@gmail.com>"
+  ],
+  "description": "Abstractified wrapper for GA tracking",
+  "main": "src/kvTrack.js",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
