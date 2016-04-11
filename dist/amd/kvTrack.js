@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.5 
+ * kvTrack - v0.0.6 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
