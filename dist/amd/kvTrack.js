@@ -3,7 +3,7 @@
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
- * http://github.com/kiva/fbkiva/license.txt
+ * http://github.com/kiva/kvTrack/license.txt
  */
 define(['jquery'], function ($, FB) {
 	'use strict';
