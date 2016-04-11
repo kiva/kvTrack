@@ -10,13 +10,12 @@ module.exports = function(grunt) {
 
 		, meta: {
 			version: '<%= pkg.version %>'
-			, banner: '/**\n * <%= pkg.name %> - v<%= meta.version %> \n' +
-				' * Copyright (c) <%= grunt.template.today("yyyy") %> Kiva Microfunds\n' +
-				' * \n' +
-				' * Licensed under the MIT license.\n' +
-				' * <%= pkg.licenses[0].url %>\n' +
-				' */\n'
-
+                        , banner: '/**\n * <%= pkg.name %> - v<%= meta.version %> \n' +
+                                ' * Copyright (c) <%= grunt.template.today("yyyy") %> Kiva Microfunds\n' +
+                                ' * \n' +
+                                ' * Licensed under the MIT license.\n' +
+                                ' * <%= pkg.licenses[0].url %>\n' +
+                                ' */\n'
 		}
 
 
@@ -55,7 +54,6 @@ module.exports = function(grunt) {
 				}
 			}
 		}
-
 
 		, shell: {
 			'rm-dist': {
