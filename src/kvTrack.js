@@ -76,6 +76,9 @@ kvTrack.prototype = {
 	 * @param {int} value
 	 */
 	, trackEvent: function (category, action, label, value) {
+		label = (label !== undefined) ? label : null;
+		value = (value !== undefined) ? value : null;
+
 		this.ga('send', 'event', {
 			'eventCategory': String(category),
 			'eventAction': String(action),
