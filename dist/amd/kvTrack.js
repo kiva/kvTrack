@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.7 
+ * kvTrack - v0.0.8 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -84,6 +84,9 @@ define(['jquery'], function ($, FB) {
 		 * @param {int} value
 		 */
 		, trackEvent: function (category, action, label, value) {
+			label = (label !== undefined) ? label : null;
+			value = (value !== undefined) ? value : null;
+	
 			this.ga('send', 'event', {
 				'eventCategory': String(category),
 				'eventAction': String(action),
