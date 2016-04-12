@@ -70,7 +70,15 @@ kvTrack.prototype = {
 		});
 	}
 
-
+	/**
+	 * Google Analytics's Page View wrapper
+	 *
+	 * @param {string} path
+	 * @param {string} category
+	 * @param {string} action
+	 * @param {string} label
+	 * @param {int} value
+	 */
 	, trackPageView: function (path, category, action, label, value) {
 		this.ga('send', 'pageview', String(path), {
 			'eventCategory': String(category),
