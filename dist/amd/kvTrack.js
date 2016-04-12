@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.8 
+ * kvTrack - v0.0.9 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -84,14 +84,14 @@ define(['jquery'], function ($, FB) {
 		 * @param {int} value
 		 */
 		, trackEvent: function (category, action, label, value) {
-			label = (label !== undefined) ? label : null;
-			value = (value !== undefined) ? value : null;
+			label = (label !== undefined) ? String(label) : null;
+			value = (value !== undefined) ? parseInt(value) : null;
 	
 			this.ga('send', 'event', {
 				'eventCategory': String(category),
 				'eventAction': String(action),
-				'eventLabel': String(label),
-				'eventValue': parseInt(value)
+				'eventLabel': label,
+				'eventValue': value
 			});
 		}
 	
@@ -105,11 +105,14 @@ define(['jquery'], function ($, FB) {
 		 * @param {int} value
 		 */
 		, trackPageView: function (path, category, action, label, value) {
+			label = (label !== undefined) ? String(label) : null;
+			value = (value !== undefined) ? parseInt(value) : null;
+	
 			this.ga('send', 'pageview', String(path), {
 				'eventCategory': String(category),
 				'eventAction': String(action),
-				'eventLabel': String(label),
-				'eventValue': parseInt(value)
+				'eventLabel': label,
+				'eventValue': value
 			});
 		}
 	};
