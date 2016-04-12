@@ -7,7 +7,6 @@
 /**
  *
  * @param {string} uaID
- * @param {Function} logHandler
  * @constructor
  */
 function kvTrack(uaID) {
@@ -33,15 +32,23 @@ function kvTrack(uaID) {
 
 
 kvTrack.prototype = {
+	/**
+	 * Generic init
+	 */
 	init: function () {
 	}
 
-
+	/**
+	 * Sets UA IDs for various upstream services
+	 */
 	, setUAId: function (uaID) {
 		this._gaID = uaID;
 	}
 
-
+	/**
+	 * Initialize Google Analytics
+	 * Sets isReady
+	 */
 	, initGA: function () {
 		var self = this;
 
@@ -60,7 +67,14 @@ kvTrack.prototype = {
 		});
 	}
 
-
+	/**
+	 * Google Analytics's Track Event wrapper
+	 *
+	 * @param {string} category
+	 * @param {string} action
+	 * @param {string} label
+	 * @param {int} value
+	 */
 	, trackEvent: function (category, action, label, value) {
 		this.ga('send', 'event', {
 			'eventCategory': String(category),
