@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.6 
+ * kvTrack - v0.0.7 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -15,7 +15,6 @@ define(['jquery'], function ($, FB) {
 	/**
 	 *
 	 * @param {string} uaID
-	 * @param {Function} logHandler
 	 * @constructor
 	 */
 	function kvTrack(uaID) {
@@ -41,15 +40,23 @@ define(['jquery'], function ($, FB) {
 	
 	
 	kvTrack.prototype = {
+		/**
+		 * Generic init
+		 */
 		init: function () {
 		}
 	
-	
+		/**
+		 * Sets UA IDs for various upstream services
+		 */
 		, setUAId: function (uaID) {
 			this._gaID = uaID;
 		}
 	
-	
+		/**
+		 * Initialize Google Analytics
+		 * Sets isReady
+		 */
 		, initGA: function () {
 			var self = this;
 	
@@ -68,9 +75,34 @@ define(['jquery'], function ($, FB) {
 			});
 		}
 	
-	
+		/**
+		 * Google Analytics's Track Event wrapper
+		 *
+		 * @param {string} category
+		 * @param {string} action
+		 * @param {string} label
+		 * @param {int} value
+		 */
 		, trackEvent: function (category, action, label, value) {
 			this.ga('send', 'event', {
+				'eventCategory': String(category),
+				'eventAction': String(action),
+				'eventLabel': String(label),
+				'eventValue': parseInt(value)
+			});
+		}
+	
+		/**
+		 * Google Analytics's Page View wrapper
+		 *
+		 * @param {string} path
+		 * @param {string} category
+		 * @param {string} action
+		 * @param {string} label
+		 * @param {int} value
+		 */
+		, trackPageView: function (path, category, action, label, value) {
+			this.ga('send', 'pageview', String(path), {
 				'eventCategory': String(category),
 				'eventAction': String(action),
 				'eventLabel': String(label),
