@@ -69,4 +69,14 @@ kvTrack.prototype = {
 			'eventValue': parseInt(value)
 		});
 	}
+
+
+	, trackPageView: function (path, category, action, label, value) {
+		this.ga('send', 'pageview', String(path), {
+			'eventCategory': String(category),
+			'eventAction': String(action),
+			'eventLabel': String(label),
+			'eventValue': parseInt(value)
+		});
+	}
 };
