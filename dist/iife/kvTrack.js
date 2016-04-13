@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.9 
+ * kvTrack - v0.0.10 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -85,7 +85,7 @@
 		 */
 		, trackEvent: function (category, action, label, value) {
 			label = (label !== undefined) ? String(label) : null;
-			value = (value !== undefined) ? parseInt(value) : null;
+			value = (value !== undefined) ? parseFloat(value) : null;
 	
 			this.ga('send', 'event', {
 				'eventCategory': String(category),
@@ -106,7 +106,7 @@
 		 */
 		, trackPageView: function (path, category, action, label, value) {
 			label = (label !== undefined) ? String(label) : null;
-			value = (value !== undefined) ? parseInt(value) : null;
+			value = (value !== undefined) ? parseFloat(value) : null;
 	
 			this.ga('send', 'pageview', String(path), {
 				'eventCategory': String(category),
