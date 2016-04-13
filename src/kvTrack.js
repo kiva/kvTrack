@@ -77,7 +77,7 @@ kvTrack.prototype = {
 	 */
 	, trackEvent: function (category, action, label, value) {
 		label = (label !== undefined) ? String(label) : null;
-		value = (value !== undefined) ? parseFloat(value) : null;
+		value = (value !== undefined) ? parseInt(value) : null;
 
 		this.ga('send', 'event', {
 			'eventCategory': String(category),
@@ -98,7 +98,7 @@ kvTrack.prototype = {
 	 */
 	, trackPageView: function (path, category, action, label, value) {
 		label = (label !== undefined) ? String(label) : null;
-		value = (value !== undefined) ? parseFloat(value) : null;
+		value = (value !== undefined) ? parseInt(value) : null;
 
 		this.ga('send', 'pageview', String(path), {
 			'eventCategory': String(category),
