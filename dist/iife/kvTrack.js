@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.11 
+ * kvTrack - v0.0.12 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -98,21 +98,17 @@
 		/**
 		 * Google Analytics's Page View wrapper
 		 *
-		 * @param {string} path
-		 * @param {string} category
-		 * @param {string} action
-		 * @param {string} label
-		 * @param {int} value
+		 * @param {string} page
+		 * @param {string} title
+		 * @param {int} loc
 		 */
-		, trackPageView: function (path, category, action, label, value) {
-			label = (label !== undefined) ? String(label) : null;
-			value = (value !== undefined) ? parseInt(value) : null;
+		, trackPageView: function (page, title, loc) {
+			title = (label !== undefined) ? String(title) : null;
+			loc = (value !== undefined) ? String(loc) : null;
 	
-			this.ga('send', 'pageview', String(path), {
-				'eventCategory': String(category),
-				'eventAction': String(action),
-				'eventLabel': label,
-				'eventValue': value
+			this.ga('send', 'pageview', String(page), {
+				'title': title,
+				'location': loc
 			});
 		}
 	};
