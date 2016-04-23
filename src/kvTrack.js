@@ -59,7 +59,7 @@ kvTrack.prototype = {
 			, cache: true
 			, crossDomain: true // forces jQuery to create a script-tag as apposed to loading via ajax
 		}).fail(function(){
-			this.isReady.reject();
+			self.isReady.reject();
 		}).done(function(){
 			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
 			self.ga('create', self._gaID, 'auto'); // jshint ignore:line
