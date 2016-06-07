@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.13 
+ * kvTrack - v0.0.14 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -103,7 +103,7 @@
 		 * @param {int} loc
 		 */
 		, trackPageView: function (page, title, loc) {
-			title = (label !== undefined) ? String(title) : null;
+			title = (title !== undefined) ? String(title) : null;
 			loc = (value !== undefined) ? String(loc) : null;
 	
 			this.ga('send', 'pageview', String(page), {
