@@ -96,7 +96,7 @@ kvTrack.prototype = {
 	 */
 	, trackPageView: function (page, title, loc) {
 		title = (title !== undefined) ? String(title) : null;
-		loc = (value !== undefined) ? String(loc) : null;
+		loc = (loc !== undefined) ? String(loc) : null;
 
 		this.ga('send', 'pageview', String(page), {
 			'title': title,
