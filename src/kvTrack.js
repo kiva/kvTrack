@@ -13,8 +13,13 @@ function kvTrack(uaID) {
 	var self = this
 	, trackDeferred = $.Deferred();
 
+	// if uaID is not an array, make it one
+	if (Object.prototype.toString.call(uaID) !== '[object Array]'){
+		uaID = [uaID];
+	}
+
 	// Local copies
-	this._gaID = '';
+	this._gaID = [];
 	this.ga = null;
 	this.isReady = trackDeferred;
 
@@ -62,7 +67,10 @@ kvTrack.prototype = {
 			self.isReady.reject();
 		}).done(function(){
 			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
-			self.ga('create', self._gaID, 'auto'); // jshint ignore:line
+			// create and label each tracker requested
+			self._gaID.forEach(function(id){
+				self.ga('create', id, 'auto', 'tracker ' + id); // jshint ignore:line
+			});
 			self.isReady.resolve();
 		});
 	}
