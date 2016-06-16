@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.17 
+ * kvTrack - v0.0.18 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -91,14 +91,18 @@ define(['jquery'], function ($, FB) {
 		 * @param {int} value
 		 */
 		, trackEvent: function (category, action, label, value) {
+			var self = this;
+	
 			label = (label !== undefined) ? String(label) : null;
 			value = (value !== undefined) ? parseInt(value) : null;
 	
-			this.ga('send', 'event', {
-				'eventCategory': String(category),
-				'eventAction': String(action),
-				'eventLabel': label,
-				'eventValue': value
+			self._gaID.forEach(function(id, count){
+				self.ga('tracker' + count + '.send', 'event', {
+					'eventCategory': String(category),
+					'eventAction': String(action),
+					'eventLabel': label,
+					'eventValue': value
+				});
 			});
 		}
 	
