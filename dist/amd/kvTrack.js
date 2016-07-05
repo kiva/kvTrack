@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.18 
+ * kvTrack - v0.0.19 
  * Copyright (c) 2016 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -31,16 +31,16 @@ define(['jquery'], function ($, FB) {
 		this.ga = null;
 		this.isReady = trackDeferred;
 	
-		// Initialize Google Analytics
-		self.setUAId(uaID);
-		self.initGA();
-	
 		// Contextualize all kvTrack methods
 		$.each(this, function (methodName, fn) {
 			if (typeof fn == 'function') {
 				self[methodName] = $.proxy(self, methodName);
 			}
 		});
+	
+		// Initialize Google Analytics
+		self.setUAId(uaID);
+		self.initGA();
 	}
 	
 	
