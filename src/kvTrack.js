@@ -66,7 +66,7 @@ kvTrack.prototype = {
 		}).fail(function(){
 			self.isReady.reject();
 		}).done(function(){
-			if (typeof self.ga !== 'undefined'){
+			if (typeof ga !== 'undefined'){
 				self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
 				// create and label each tracker requested
 				self._gaID.forEach(function(id, count){
