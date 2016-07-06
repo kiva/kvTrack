@@ -66,12 +66,16 @@ kvTrack.prototype = {
 		}).fail(function(){
 			self.isReady.reject();
 		}).done(function(){
-			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
-			// create and label each tracker requested
-			self._gaID.forEach(function(id, count){
-				self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
-			});
-			self.isReady.resolve();
+			if (typeof self.ga !== 'undefined'){
+				self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
+				// create and label each tracker requested
+				self._gaID.forEach(function(id, count){
+					self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+				});
+				self.isReady.resolve();
+			} else {
+				self.isReady.reject();
+			}
 		});
 	}
 	/**
