@@ -88,14 +88,16 @@ kvTrack.prototype = {
 		label = (label !== undefined) ? String(label) : null;
 		value = (value !== undefined) ? parseInt(value) : null;
 
-		self._gaID.forEach(function(id, count){
-			self.ga('tracker' + count + '.send', 'event', {
-				'eventCategory': String(category),
-				'eventAction': String(action),
-				'eventLabel': label,
-				'eventValue': value
+		if (typeof self.ga !== 'undefined'){
+			self._gaID.forEach(function(id, count){
+				self.ga('tracker' + count + '.send', 'event', {
+					'eventCategory': String(category),
+					'eventAction': String(action),
+					'eventLabel': label,
+					'eventValue': value
+				});
 			});
-		});
+		}
 	}
 
 	/**
@@ -111,11 +113,13 @@ kvTrack.prototype = {
 		title = (title !== undefined) ? String(title) : null;
 		loc = (loc !== undefined) ? String(loc) : null;
 
-		self._gaID.forEach(function(id, count){
-			self.ga('tracker' + count + '.send', 'pageview', String(page), {
-				'title': title,
-				'location': loc
+		if (typeof self.ga !== 'undefined'){
+			self._gaID.forEach(function(id, count){
+				self.ga('tracker' + count + '.send', 'pageview', String(page), {
+					'title': title,
+					'location': loc
+				});
 			});
-		});
+		}
 	}
 };
