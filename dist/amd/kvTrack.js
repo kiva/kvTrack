@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.20 
+ * kvTrack - v0.0.21 
  * Copyright (c) 2017 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -100,7 +100,7 @@ define(['jquery'], function ($, FB) {
 			label = (label !== undefined) ? String(label) : null;
 			value = (value !== undefined) ? parseInt(value) : null;
 	
-			if (typeof self.ga !== 'undefined'){
+			try {
 				self._gaID.forEach(function(id, count){
 					self.ga('tracker' + count + '.send', 'event', {
 						'eventCategory': String(category),
@@ -109,6 +109,8 @@ define(['jquery'], function ($, FB) {
 						'eventValue': value
 					});
 				});
+			} catch (error) {
+				return;
 			}
 		}
 	
@@ -125,13 +127,15 @@ define(['jquery'], function ($, FB) {
 			title = (title !== undefined) ? String(title) : null;
 			loc = (loc !== undefined) ? String(loc) : null;
 	
-			if (typeof self.ga !== 'undefined'){
+			try {
 				self._gaID.forEach(function(id, count){
 					self.ga('tracker' + count + '.send', 'pageview', String(page), {
 						'title': title,
 						'location': loc
 					});
 				});
+			} catch (error) {
+				return;
 			}
 		}
 	};
