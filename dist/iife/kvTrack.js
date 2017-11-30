@@ -1,5 +1,5 @@
 /**
- * kvTrack - v0.0.21 
+ * kvTrack - v0.0.23 
  * Copyright (c) 2017 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -40,7 +40,16 @@
 	
 		// Initialize Google Analytics
 		self.setUAId(uaID);
-		self.initGA();
+		// Use existing lib if present
+		if (typeof ga === 'function') {
+			this.ga = ga;
+			this._gaID.forEach(function(id, count){
+				self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+			});
+			this.isReady.resolve();
+		} else {
+			self.initGA();
+		}
 	}
 	
 	
@@ -133,6 +142,27 @@
 						'title': title,
 						'location': loc
 					});
+				});
+			} catch (error) {
+				return;
+			}
+		}
+	
+		/**
+		 * Google Analytics's set dimension wrapper
+		 *
+		 * @param {string} dimension
+		 * @param {string} value
+		 */
+		, trackSetDimension: function (dimension, value) {
+			var self = this;
+	
+			dimension = (dimension !== undefined) ? String(dimension) : null;
+			value = (value !== undefined) ? String(value) : null;
+	
+			try {
+				self._gaID.forEach(function(id, count) {
+					self.ga('tracker' + count + '.set', dimension, value);
 				});
 			} catch (error) {
 				return;
