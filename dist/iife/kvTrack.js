@@ -1,6 +1,6 @@
 /**
- * kvTrack - v0.0.23 
- * Copyright (c) 2017 Kiva Microfunds
+ * kvTrack - v0.0.24 
+ * Copyright (c) 2018 Kiva Microfunds
  * 
  * Licensed under the MIT license.
  * http://github.com/kiva/kvTrack/license.txt
@@ -50,6 +50,9 @@
 		} else {
 			self.initGA();
 		}
+	
+		// Check for Snowplow
+		this.sp = (typeof snowplow === "function") ? snowplow : null;
 	}
 	
 	
@@ -95,20 +98,25 @@
 				}
 			});
 		}
+	
 		/**
 		 * Google Analytics's Track Event wrapper
+		 * -> extended to fire to Snowplow
 		 *
 		 * @param {string} category
 		 * @param {string} action
 		 * @param {string} label
 		 * @param {int} value
+		 * @param {boolean} fireSnowplow
 		 */
-		, trackEvent: function (category, action, label, value) {
+		, trackEvent: function (category, action, label, value, fireSnowplow) {
+	
 			var self = this;
 	
-			label = (label !== undefined) ? String(label) : null;
-			value = (value !== undefined) ? parseInt(value) : null;
+			label = (label !== undefined && label !== null) ? String(label) : null;
+			value = (value !== undefined && value !== null) ? parseInt(value) : null;
 	
+			// Attempt GA event
 			try {
 				self._gaID.forEach(function(id, count){
 					self.ga('tracker' + count + '.send', 'event', {
@@ -119,8 +127,17 @@
 					});
 				});
 			} catch (error) {
-				return;
 			}
+	
+			// Attempt Snowplow event
+			try {
+				if (fireSnowplow) {
+					self.sp('trackStructEvent', category, action, label, value);
+				}
+			} catch (error) {
+			}
+	
+			return;
 		}
 	
 		/**
