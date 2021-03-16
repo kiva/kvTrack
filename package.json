@@ -11,11 +11,10 @@
       "url": "http://github.com/kiva/kvTrack/license.txt"
     }
   ],
+  "main": "Gruntfile.js",
   "dependencies": {
     "grunt-cli": "^1.2.0"
   },
-  "main": "Gruntfile.js",
-  "dependencies": {},
   "devDependencies": {
     "buster": "^0.7.18",
     "buster-istanbul": "^0.1.10",
