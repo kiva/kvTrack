@@ -25,9 +25,7 @@ function kvTrack(uaID) {
 	// Use existing lib if present
 	if (typeof ga === 'function') {
 		this.ga = ga;
-		this._gaID.forEach(function(id, count){
-			self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
-		});
+		self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
 	}
 
 	// Contextualize all kvTrack methods
