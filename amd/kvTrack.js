@@ -21,7 +21,14 @@ function kvTrack(uaID) {
 
 	// Initialize Google Analytics
 	self.setUAId(uaID);
-	self.initGA();
+
+	// Use existing lib if present
+	if (typeof ga === 'function') {
+		this.ga = ga;
+		this._gaID.forEach(function(id, count){
+			self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+		});
+	}
 
 	// Contextualize all kvTrack methods
 	$.each(this, function (methodName, fn) {
@@ -29,6 +36,12 @@ function kvTrack(uaID) {
 			self[methodName] = $.proxy(self, methodName);
 		}
 	});
+
+	// Check for Snowplow
+	this.sp = (typeof snowplow === "function") ? snowplow : null;
+
+	// resolve deferred
+	self.isReady.resolve();
 }
 
 
@@ -36,30 +49,9 @@ kvTrack.prototype = {
 	init: function () {
 	}
 
-
 	, setUAId: function (uaID) {
 		this._gaID = uaID;
 	}
-
-
-	, initGA: function () {
-		var self = this;
-
-		// Get analytics.js from Google
-		$.ajax({
-			url: '//www.google-analytics.com/analytics.js'
-			, dataType: 'script'
-			, cache: true
-			, crossDomain: true // forces jQuery to create a script-tag as apposed to loading via ajax
-		}).fail(function(){
-			this.isReady.reject();
-		}).done(function(){
-			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
-			self.ga('create', self._gaID, 'auto'); // jshint ignore:line
-			self.isReady.resolve();
-		});
-	}
-
 
 	, trackEvent: function (category, action, label, value) {
 		this.ga('send', 'event', {
