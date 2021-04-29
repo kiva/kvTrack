@@ -1,6 +1,6 @@
 {
   "name": "kvTrack",
-  "version": "0.0.24",
+  "version": "1.0.0",
   "description": "kvTrack",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

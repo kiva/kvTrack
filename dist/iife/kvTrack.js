@@ -1,6 +1,6 @@
 /**
- * kvTrack - v0.0.24 
- * Copyright (c) 2018 Kiva Microfunds
+ * kvTrack - v1.0.0 
+ * Copyright (c) 2021 Kiva Microfunds
  * 
  * Licensed under the MIT license.
  * http://github.com/kiva/kvTrack/license.txt
@@ -27,6 +27,7 @@
 		}
 	
 		// Local copies
+		this.sp = null;
 		this._gaID = [];
 		this.ga = null;
 		this.isReady = trackDeferred;
@@ -39,22 +40,40 @@
 		});
 	
 		// Initialize Google Analytics
-		self.setUAId(uaID);
-		// Use existing lib if present
-		if (typeof ga === 'function') {
-			this.ga = ga;
-			this._gaID.forEach(function(id, count){
-				self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
-			});
-			this.isReady.resolve();
-		} else {
-			self.initGA();
-		}
+		this.setUAId(uaID);
 	
-		// Check for Snowplow
-		this.sp = (typeof snowplow === "function") ? snowplow : null;
+		var readyStateTimeout;
+		var readyStateInterval = window.setInterval(function() {
+			if (typeof window.ga === 'function') {
+				// Setup Global GA
+				self.ga = window.ga;
+				self._gaID.forEach(function(id, count){
+					self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+				});
+			}
+	
+			if (typeof window.snowplow === 'function') {
+				// Setup Global Snowplow
+				self.sp = window.snowplow;
+	
+				// resovle deferred for next steps
+				// We currently resolve with snowplow as a priority analytics lib
+				self.isReady.resolve();
+	
+				clearInterval(readyStateInterval);
+				clearTimeout(readyStateTimeout);
+			}
+		}, 100);
+	
+		readyStateTimeout = window.setTimeout(function() {
+			// resolve the promise
+			self.isReady.resolve();
+			// clean up interval and timeout
+			clearInterval(readyStateInterval);
+			clearTimeout(readyStateTimeout);
+		}, 5000);
+		
 	}
-	
 	
 	kvTrack.prototype = {
 		/**
@@ -68,35 +87,6 @@
 		 */
 		, setUAId: function (uaID) {
 			this._gaID = uaID;
-		}
-	
-		/**
-		 * Initialize Google Analytics
-		 * Sets isReady
-		 */
-		, initGA: function () {
-			var self = this;
-	
-			// Get analytics.js from Google
-			$.ajax({
-				url: '//www.google-analytics.com/analytics.js'
-				, dataType: 'script'
-				, cache: true
-				, crossDomain: true // forces jQuery to create a script-tag as apposed to loading via ajax
-			}).fail(function(){
-				self.isReady.reject();
-			}).done(function(){
-				if (typeof ga !== 'undefined'){
-					self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
-					// create and label each tracker requested
-					self._gaID.forEach(function(id, count){
-						self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
-					});
-					self.isReady.resolve();
-				} else {
-					self.isReady.reject();
-				}
-			});
 		}
 	
 		/**
@@ -131,7 +121,7 @@
 	
 			// Attempt Snowplow event
 			try {
-				if (fireSnowplow) {
+				if (typeof self.sp === 'function') {
 					self.sp('trackStructEvent', category, action, label, value);
 				}
 			} catch (error) {
@@ -160,6 +150,16 @@
 						'location': loc
 					});
 				});
+			} catch (error) {
+				return;
+			}
+	
+			try {
+				// Snowplow pageview
+				if (typeof self.sp === 'function') {
+					// track page view
+					self.sp('trackPageView');
+				}
 			} catch (error) {
 				return;
 			}
