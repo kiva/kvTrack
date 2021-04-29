@@ -19,6 +19,7 @@ function kvTrack(uaID) {
 	}
 
 	// Local copies
+	this.sp = null;
 	this._gaID = [];
 	this.ga = null;
 	this.isReady = trackDeferred;
@@ -31,20 +32,39 @@ function kvTrack(uaID) {
 	});
 
 	// Initialize Google Analytics
-	self.setUAId(uaID);
-	// Use existing lib if present
-	if (typeof ga === 'function') {
-		this.ga = ga;
-		this._gaID.forEach(function(id, count){
-			self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
-		});
-		this.isReady.resolve();
-	} else {
-		self.initGA();
-	}
+	this.setUAId(uaID);
 
-	// Check for Snowplow
-	this.sp = (typeof snowplow === "function") ? snowplow : null;
+	var readyStateTimeout;
+	var readyStateInterval = window.setInterval(function() {
+		if (typeof window.ga === 'function') {
+			// Setup Global GA
+			self.ga = window.ga;
+			self._gaID.forEach(function(id, count){
+				self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+			});
+		}
+
+		if (typeof window.snowplow === 'function') {
+			// Setup Global Snowplow
+			self.sp = window.snowplow;
+
+			// resovle deferred for next steps
+			// We currently resolve with snowplow as a priority analytics lib
+			self.isReady.resolve();
+
+			clearInterval(readyStateInterval);
+			clearTimeout(readyStateTimeout);
+		}
+	}, 100);
+
+	readyStateTimeout = window.setTimeout(function() {
+		// resolve the promise
+		self.isReady.resolve();
+		// clean up interval and timeout
+		clearInterval(readyStateInterval);
+		clearTimeout(readyStateTimeout);
+	}, 5000);
+	
 }
 
 
@@ -152,6 +172,16 @@ kvTrack.prototype = {
 					'location': loc
 				});
 			});
+		} catch (error) {
+			return;
+		}
+
+		try {
+			// Snowplow pageview
+			if (typeof self.sp === 'function') {
+				// track page view
+				self.sp('trackPageView');
+			}
 		} catch (error) {
 			return;
 		}
