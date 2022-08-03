@@ -1,6 +1,6 @@
 /**
- * kvTrack - v1.0.0 
- * Copyright (c) 2021 Kiva Microfunds
+ * kvTrack - v1.0.1 
+ * Copyright (c) 2022 Kiva Microfunds
  * 
  * Licensed under the MIT license.
  * http://github.com/kiva/kvTrack/license.txt
@@ -29,7 +29,7 @@
 		// Local copies
 		this.sp = null;
 		this._gaID = [];
-		this.ga = null;
+		this.gtag = null;
 		this.isReady = trackDeferred;
 	
 		// Contextualize all kvTrack methods
@@ -40,15 +40,17 @@
 		});
 	
 		// Initialize Google Analytics
+		this.init();
 		this.setUAId(uaID);
 	
 		var readyStateTimeout;
 		var readyStateInterval = window.setInterval(function() {
-			if (typeof window.ga === 'function') {
+			if (typeof window.gtag === 'function') {
 				// Setup Global GA
-				self.ga = window.ga;
+				self.gtag = window.gtag;
 				self._gaID.forEach(function(id, count){
-					self.ga('create', id, 'auto', 'tracker' + count); // jshint ignore:line
+					self.gtag('js', new Date());
+					self.gtag('config', id, { 'send_page_view': false });
 				});
 			}
 	
@@ -80,6 +82,12 @@
 		 * Generic init
 		 */
 		init: function () {
+			// initialize the global methods and dataLayer
+			// https://developers.google.com/analytics/devguides/migration/ua/analyticsjs-to-gtagjs#analyticsjs_2_gtagjs
+			window.dataLayer = window.dataLayer || [];
+			window.gtag = function(){
+				window.dataLayer.push(arguments);
+			};
 		}
 	
 		/**
@@ -109,11 +117,11 @@
 			// Attempt GA event
 			try {
 				self._gaID.forEach(function(id, count){
-					self.ga('tracker' + count + '.send', 'event', {
-						'eventCategory': String(category),
-						'eventAction': String(action),
-						'eventLabel': label,
-						'eventValue': value
+					self.gtag('event', String(action), {
+						event_category: String(category),
+						event_label: String(label),
+						value: parseInt(value),
+						send_to: id
 					});
 				});
 			} catch (error) {
@@ -145,9 +153,11 @@
 	
 			try {
 				self._gaID.forEach(function(id, count){
-					self.ga('tracker' + count + '.send', 'pageview', String(page), {
-						'title': title,
-						'location': loc
+					self.gtag('event', 'page_view', {
+						page_path: String(page),
+						title: title,
+						location: loc,
+						send_to: id
 					});
 				});
 			} catch (error) {
@@ -180,6 +190,9 @@
 			try {
 				self._gaID.forEach(function(id, count) {
 					self.ga('tracker' + count + '.set', dimension, value);
+					self.gtag('config', id, {
+						dimension: value
+					});
 				});
 			} catch (error) {
 				return;
