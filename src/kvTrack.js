@@ -181,7 +181,6 @@ kvTrack.prototype = {
 
 		try {
 			self._gaID.forEach(function(id, count) {
-				self.ga('tracker' + count + '.set', dimension, value);
 				self.gtag('config', id, {
 					dimension: value
 				});
