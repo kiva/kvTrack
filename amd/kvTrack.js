@@ -16,12 +16,12 @@ function kvTrack(uaID) {
 
 	// Local copies
 	this._gaID = '';
-	this.ga = null;
+	this.gtag = null;
 	this.isReady = trackDeferred;
 
 	// Initialize Google Analytics
 	self.setUAId(uaID);
-	self.initGA();
+	self.initGA(uiID);
 
 	// Contextualize all kvTrack methods
 	$.each(this, function (methodName, fn) {
@@ -42,31 +42,36 @@ kvTrack.prototype = {
 	}
 
 
-	, initGA: function () {
+	, initGA: function (uaID) {
+		// initialize the global methods and dataLayer
+		// https://developers.google.com/analytics/devguides/migration/ua/analyticsjs-to-gtagjs#analyticsjs_2_gtagjs
+		window.dataLayer = window.dataLayer || [];
+		window.gtag = function(){window.dataLayer.push(arguments);}
+
 		var self = this;
 
 		// Get analytics.js from Google
 		$.ajax({
-			url: '//www.google-analytics.com/analytics.js'
+			url: '//www.googletagmanager.com/gtag/js?id=' + uaId
 			, dataType: 'script'
 			, cache: true
 			, crossDomain: true // forces jQuery to create a script-tag as apposed to loading via ajax
 		}).fail(function(){
 			this.isReady.reject();
 		}).done(function(){
-			self.ga = window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date; // jshint ignore:line
-			self.ga('create', self._gaID, 'auto'); // jshint ignore:line
+			self.gtag = window.gtag;
+			self.gtag('js', new Date());
+			self.gtag('config', uaId, { 'send_page_view': false });
 			self.isReady.resolve();
 		});
 	}
 
 
 	, trackEvent: function (category, action, label, value) {
-		this.ga('send', 'event', {
-			'eventCategory': String(category),
-			'eventAction': String(action),
-			'eventLabel': String(label),
-			'eventValue': parseInt(value)
+		this.gtag('event', String(action), {
+			event_category: String(category),
+			event_label: String(label),
+			value: parseInt(value)
 		});
 	}
 };
