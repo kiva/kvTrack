@@ -1,5 +1,5 @@
 /**
- * kvTrack - v2.0.0 
+ * kvTrack - v2.0.1 
  * Copyright (c) 2022 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -189,7 +189,6 @@
 	
 			try {
 				self._gaID.forEach(function(id, count) {
-					self.ga('tracker' + count + '.set', dimension, value);
 					self.gtag('config', id, {
 						dimension: value
 					});
