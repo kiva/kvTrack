@@ -182,7 +182,8 @@ kvTrack.prototype = {
 		try {
 			self._gaID.forEach(function(id, count) {
 				self.gtag('config', id, {
-					dimension: value
+					dimension: value,
+					'send_page_view': false
 				});
 			});
 		} catch (error) {
